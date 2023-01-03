@@ -13,7 +13,7 @@ from Data.utils import candlestick_ochl, volume_overlay, dataframe_empty_handler
 
 
 class CandlstickChart:
-    def __init__(self, market: str=None, size=None, period=None, linespace=None, candlewidth=None, linewidth=None, style=None, name=None, exist_ok=None, **kwargs) -> None:
+    def __init__(self, market: str=None, size=None, period=None, linespace=None, candlewidth=None, linewidth=None, style=None, name=None, exist_ok=None, root=Path.cwd(), **kwargs) -> None:
         '''
         size: [width, height]
             the size of chart image
@@ -38,14 +38,14 @@ class CandlstickChart:
         self.linewidth = linewidth
         self.style = style
         self.set_default(**kwargs)
-        self.path = Path(increment_path(Path.cwd() / 'Image' / (f'{size[0]}x{size[1]}' \
+        self.path = Path(increment_path(root / 'Image' / (f'{size[0]}x{size[1]}' \
             if not name else name), exist_ok=exist_ok, sep='_'))
         name = self.path.name
         self.path = self.path / self.market
         (self.path / 'images').mkdir(parents=True, exist_ok=True)
         (self.path / 'pixels').mkdir(parents=True, exist_ok=True)
         try:
-            info = pd.read_csv(Path.cwd() / 'Image' / 'info.csv', index_col='Name')
+            info = pd.read_csv(root / 'Image' / 'info.csv', index_col='Name')
         except FileNotFoundError:
             info = pd.DataFrame()
 
@@ -69,7 +69,7 @@ class CandlstickChart:
         })
         info = pd.concat([info, new_info.set_index('Name')])
         info = info[~info.index.duplicated(keep='last')]
-        info.to_csv(Path.cwd() / 'Image' / 'info.csv')
+        info.to_csv(root / 'Image' / 'info.csv')
         
     def set_default(
         self,
@@ -224,9 +224,10 @@ class CNNChart(CandlstickChart):
         style='dark_background',
         name=None,
         exist_ok=False,
+        root=Path.cwd(),
         **kwargs,
     ) -> None:
-        super().__init__(market, size, period, linespace, candlewidth, linewidth, style, name, exist_ok, **kwargs)
+        super().__init__(market, size, period, linespace, candlewidth, linewidth, style, name, exist_ok, root, **kwargs)
     
 
 class YoloChart(CandlstickChart):
@@ -241,9 +242,11 @@ class YoloChart(CandlstickChart):
         style='default',
         name=None,
         exist_ok=False,
+        root=Path.cwd(),
         **kwargs
     ) -> None:
-        super().__init__(market, size, period, linespace, candlewidth, linewidth, style, name, exist_ok, **kwargs)
+        super().__init__(market, size, period, linespace, candlewidth, linewidth, style, name, exist_ok, 
+        root, **kwargs)
         
 
 def subplots(volume, MACD):

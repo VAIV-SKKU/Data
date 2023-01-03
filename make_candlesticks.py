@@ -26,6 +26,9 @@ if __name__ == '__main__':
         '--name', '-n', type=str, dest='name', default=None, help='the name of chart folder'
     )
     parser.add_argument(
+        '--root', '-r', type=str, default=str(Path.cwd()), help='Root Directory of Stock' 
+    )
+    parser.add_argument(
         '--exist-ok', action='store_true',
         help='existing project/name ok, do not increment'
     )
