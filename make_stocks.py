@@ -20,4 +20,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     for market in args.market:
-        StockMarket(market, root=args.root).update_datas()
+        StockMarket(market, root=Path(args.root)).update_datas()

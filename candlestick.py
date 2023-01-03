@@ -13,14 +13,12 @@ from Data.utils import candlestick_ochl, volume_overlay, dataframe_empty_handler
 
 
 class CandlstickChart:
-    def __init__(self, market: str=None, size=None, period=None, linespace=None, candlewidth=None, linewidth=None, style=None, name=None, exist_ok=None, root=Path.cwd(), **kwargs) -> None:
+    def __init__(self, market: str=None, size=None, period=None, candlewidth=None, linewidth=None, style=None, name=None, exist_ok=None, root=Path.cwd(), **kwargs) -> None:
         '''
         size: [width, height]
             the size of chart image
         period: int
             the trading period of a chart
-        linespace: float
-            the distance of each candle
         candlewidth: float
             the width of each candle
         linewidth: float
@@ -33,7 +31,6 @@ class CandlstickChart:
         self.market = market.capitalize()
         self.size = size
         self.period = period
-        self.linespace = linespace
         self.candlewidth = candlewidth
         self.linewidth = linewidth
         self.style = style
@@ -53,7 +50,6 @@ class CandlstickChart:
             'Name': [name],
             'Size': [f'{size[0]}x{size[1]}'],
             'period': [period],
-            'linespace': [linespace],
             'candlewidth': [candlewidth],
             'linewidth': [linewidth],
             'style': [style],
@@ -143,7 +139,7 @@ class CandlstickChart:
         plt.tight_layout(pad=0)
         fig.set_constrained_layout_pads(w_pad=0, h_pad=0)
         
-        t = np.arange(1, self.period * self.linespace+1, self.linespace)
+        t = np.arange(1, self.period + 1)
         quote = c[['Open', 'Close', 'High', 'Low']]
         quote.insert(0, 't', t)
         quote.reset_index(drop=True, inplace=True)
@@ -183,8 +179,8 @@ class CandlstickChart:
         
         if not 0 in self.feature.get('MACD'):
             ax3 = fig.add_subplot(ax[num])
-            ax3.plot(c['MACD'], linewidth=1, color=self.color.get('MACD')[0], alpha=None)
-            ax3.plot(c['MACD_Signal'], linewidth=1, color=self.color.get('MACD')[1], alpha=None)
+            ax3.plot(c['MACD'], linewidth=self.linewidth, color=self.color.get('MACD')[0], alpha=None)
+            ax3.plot(c['MACD_Signal'], linewidth=self.linewidth, color=self.color.get('MACD')[1], alpha=None)
             ax3.grid(False)
             ax3.set_xticklabels([])
             ax3.set_yticklabels([])
@@ -218,7 +214,6 @@ class CNNChart(CandlstickChart):
         market='Kospi',
         size=[224, 224],
         period=20,
-        linespace=1,
         candlewidth=0.8,
         linewidth=1,
         style='dark_background',
@@ -227,7 +222,7 @@ class CNNChart(CandlstickChart):
         root=Path.cwd(),
         **kwargs,
     ) -> None:
-        super().__init__(market, size, period, linespace, candlewidth, linewidth, style, name, exist_ok, root, **kwargs)
+        super().__init__(market, size, period, candlewidth, linewidth, style, name, exist_ok, root, **kwargs)
     
 
 class YoloChart(CandlstickChart):
@@ -236,7 +231,6 @@ class YoloChart(CandlstickChart):
         market='Kospi',
         size=[1800, 650],
         period=245,
-        linespace=1,
         candlewidth=0.8,
         linewidth=1800/224,
         style='default',
@@ -245,7 +239,7 @@ class YoloChart(CandlstickChart):
         root=Path.cwd(),
         **kwargs
     ) -> None:
-        super().__init__(market, size, period, linespace, candlewidth, linewidth, style, name, exist_ok, 
+        super().__init__(market, size, period, candlewidth, linewidth, style, name, exist_ok, 
         root, **kwargs)
         
 
@@ -296,7 +290,6 @@ def get_config(name):
     config = raw.replace(np.nan, '')
     size = list(map(int, config['Size'].split('x')))
     period = int(config['period'])
-    linespace = float(config['linespace'])
     candlewidth = float(config['candlewidth'])
     linewidth = float(config['linewidth'])
     style = config['style']
@@ -313,7 +306,6 @@ def get_config(name):
     config_dict = {
         'size': size,
         'period': period,
-        'linespace': linespace,
         'candlewidth': candlewidth,
         'linewidth': linewidth,
         'style': style,

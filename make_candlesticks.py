@@ -66,9 +66,6 @@ if __name__ == '__main__':
         '--period', type=int, default=argparse.SUPPRESS, help='the trading period of a chart'
     )
     config.add_argument(
-        '--linespace', '-ls', type=float, default=argparse.SUPPRESS, help='the distance of each candle'
-    )
-    config.add_argument(
         '--candlewidth', '-cw', type=float, default=argparse.SUPPRESS, help='the width of each candle'
     )
     config.add_argument(
@@ -110,7 +107,7 @@ if __name__ == '__main__':
         '--MACDColor', '-mc', nargs='+', type=str, default=argparse.SUPPRESS, help='the color of MACD and MACD oscillator'
     )
     args = parser.parse_args()
-    
+    args.root = Path(args.root)
     kwargs = args.__dict__
     
     for market in args.market:
