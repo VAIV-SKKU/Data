@@ -73,7 +73,7 @@ if __name__ == '__main__':
     )
     config.add_argument(
         '--style', type=str, default=argparse.SUPPRESS,
-        help='plot style of matplotlib (ex. default: white background, dark_style: dark background)'
+        help='plot style of matplotlib (ex. default: white background, dark_background: dark background)'
     )
     
     feature = parser.add_argument_group('Feature')
