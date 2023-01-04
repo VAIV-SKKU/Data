@@ -40,7 +40,7 @@ from Data.candlestick import get_config
 
 
 class Labeling:
-    def __init__(self, market: str, method: str, period: int, **kwargs) -> None:
+    def __init__(self, market: str, method: str, period: int, root=Path.cwd(), **kwargs) -> None:
         '''
         method: str
             the method of labeling
@@ -52,7 +52,8 @@ class Labeling:
         '''
         if 'undefined' in kwargs:
             return
-        self.path = Path.cwd() / 'Labeling'
+        self.root = root
+        self.path = root / 'Labeling'
         self.market = market.capitalize()
         self.method = method
         self.period = period
@@ -80,7 +81,7 @@ class Labeling:
     
 
 class CNNLabeling(Labeling):
-    def __init__(self, market, period=20, interval=5, method='4%_01_2', **kwargs) -> None:
+    def __init__(self, market, period=20, interval=5, method='4%_01_2', root=Path.cwd(), **kwargs) -> None:
         '''
         interval: int
             forecast interval
@@ -91,7 +92,7 @@ class CNNLabeling(Labeling):
             1: after interval, if close price increase more than n%
             0: after interval, if close price decrease
         '''
-        super().__init__(market, method, period)
+        super().__init__(market, method, period, root=root)
         self.path = self.path / 'CNN' / self.market / self.method
         self.interval = interval
         self.path.mkdir(parents=True, exist_ok=True)
@@ -154,13 +155,13 @@ class CNNLabeling(Labeling):
 
 
 class YoloLabeling(Labeling):
-    def __init__(self, market: str, method: str, period=245, name=None, **kwargs) -> None:
+    def __init__(self, market: str, method: str, period=245, name=None, root=Path.cwd(), **kwargs) -> None:
         '''
         name: str
             Candlestick Chart folder name
             It is necessary to Merge Labeling
         '''
-        super().__init__(market, method, period)
+        super().__init__(market, method, period, root=root)
         self.path = self.path / 'Yolo' / self.market / self.method
         self.path.mkdir(parents=True, exist_ok=True)
         self.name = name
@@ -195,7 +196,7 @@ class YoloLabeling(Labeling):
                     patterns = self.load_labeling(ticker, last_date)
                     
                     # get candlestick chart config
-                    config = get_config(self.name)
+                    config = get_config(self.name, self.root)
                     labeling = merge_labeling(section, ticker, last_date, minmax, patterns, config, 4, 2)
                     self.change_method('Merge')
                     

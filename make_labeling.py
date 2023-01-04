@@ -26,6 +26,9 @@ if __name__ == '__main__':
              'KONEX: Stock market includes KONEX only'
     )
     parser.add_argument(
+        '--root', '-r', type=str, default=str(Path.cwd()), help='Root Directory of Stock' 
+    )
+    parser.add_argument(
         '--number', '-num', type=int, dest='number', default=None,
         help='How many stock you make',
     )

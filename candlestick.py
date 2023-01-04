@@ -284,8 +284,8 @@ def get_pixel(size, lines, patches, fig, stock):
 
 
 @dataframe_empty_handler
-def get_config(name):
-    info = pd.read_csv(Path.cwd() / 'Image' / 'info.csv', index_col='Name')
+def get_config(name, root=Path.cwd()):
+    info = pd.read_csv(root / 'Image' / 'info.csv', index_col='Name')
     raw = info.loc[name]
     config = raw.replace(np.nan, '')
     size = list(map(int, config['Size'].split('x')))
