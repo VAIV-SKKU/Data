@@ -13,6 +13,9 @@ def make_dataset(dataset: Dataset, **kwargs):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument(
+        '--root', '-r', type=str, default=str(Path.cwd()), help='Root Directory of Dataset' 
+    )
     base = parser.add_mutually_exclusive_group(required=True)
     base.add_argument(
         '--yolo', action='store_true', help='use default yolo chart setting'

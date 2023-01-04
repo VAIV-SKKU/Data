@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 import torch
+import sys
+from pathlib import Path
+p = Path.absolute(Path.cwd().parent)
+sys.path.append(str(p))
 from Data.candlestick import YoloChart
 from Data.stock import Stock
 
