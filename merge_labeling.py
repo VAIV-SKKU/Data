@@ -56,6 +56,8 @@ def merge_labeling(stock: pd.DataFrame, ticker, last_date, minmax: pd.DataFrame,
     before_drange = {'Label': -1, 'Date': 'empty', 'Range': []}
     chart = YoloChart(market=Stock(ticker).market, exist_ok=True, **config)
     pixel = chart.load_pixel_coordinates(ticker=ticker, last_date=last_date)
+    if pixel.empty:
+        return
     dates = stock.index.tolist()
 
     for row in minmax.to_dict('records'):
