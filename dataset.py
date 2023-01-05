@@ -23,6 +23,7 @@ import pandas as pd
 import random
 import shutil
 from typing import List
+from tqdm import tqdm
 import sys
 p = Path.absolute(Path.cwd().parent)
 sys.path.append(str(p))
@@ -227,7 +228,7 @@ class YoloDataset(Dataset):
             folder = f'test{year}'
             folders[folder] = [p for p in labelings if between(p.name.split('_')[1], [year, year+1])]
             folders[folder] = self.sampling(folders[folder], 2)
-    
+
         for folder, files in folders.items():
             (self.path / 'images' / folder).mkdir(parents=True, exist_ok=True)
             (self.path / 'pixels' / folder).mkdir(parents=True, exist_ok=True)
@@ -235,7 +236,7 @@ class YoloDataset(Dataset):
             (self.path / 'dataframes' / folder).mkdir(parents=True, exist_ok=True)
             self.files_labeling(files, folder)
             self.move_image(files, folder)
-        
+
     def sampling(self, files: list, n):
         super().sampling()
         if self.sample[n] == -1:  # do not sample
@@ -249,7 +250,7 @@ class YoloDataset(Dataset):
         name: str
             folder name (train / valid / test{year})
         '''
-        for file in files:
+        for i, file in enumerate(tqdm(files)):
             s = file.stem.split('_')
             ticker = s[0]
             last_date = s[1]

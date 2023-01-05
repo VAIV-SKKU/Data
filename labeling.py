@@ -27,6 +27,7 @@
 '''
 import pandas as pd
 from pathlib import Path
+from tqdm import tqdm
 import numpy as np
 import sys
 p = Path.absolute(Path.cwd().parent)
@@ -173,7 +174,7 @@ class YoloLabeling(Labeling):
         dates = data.index.tolist()
         last_dates = [d for d in dates if (d >= start) & (d < end)]
         
-        for last_date in last_dates:
+        for i, last_date in enumerate(tqdm(last_dates)):
             i = dates.index(last_date)
             section = data.iloc[i - self.period + 1: i + 1, :]  # trading(input) data
             if len(section) == self.period:

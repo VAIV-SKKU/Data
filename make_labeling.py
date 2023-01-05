@@ -62,6 +62,8 @@ if __name__ == '__main__':
     )
     
     args = parser.parse_args()
+    args.root = Path(args.root)
+    
     kwargs = args.__dict__
 
     for market in args.market:
