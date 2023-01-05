@@ -224,6 +224,9 @@ class CNNChart(CandlstickChart):
     ) -> None:
         super().__init__(market, size, period, candlewidth, linewidth, style, name, exist_ok, root, **kwargs)
     
+    def make_chart(self, ticker, last_date, pixel=False):
+        return super().make_chart(ticker, last_date, pixel)
+
 
 class YoloChart(CandlstickChart):
     def __init__(
