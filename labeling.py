@@ -174,6 +174,7 @@ class YoloLabeling(Labeling):
         dates = data.index.tolist()
         last_dates = [d for d in dates if (d >= start) & (d < end)]
         
+        print(f'Ticker: {ticker}')
         for i, last_date in enumerate(tqdm(last_dates)):
             i = dates.index(last_date)
             section = data.iloc[i - self.period + 1: i + 1, :]  # trading(input) data
