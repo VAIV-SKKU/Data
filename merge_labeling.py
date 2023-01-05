@@ -31,7 +31,7 @@ def minmax_drange(stock: pd.DataFrame, last_date, left_thres, right_thres, temp)
     right_close = stock.Close.loc[last_date:].iloc[1:]
     left_most = last_date
     right_most = last_date
-
+    
     for left, lclose in left_close.items():
         profit = temp*claculate_profit(lclose, close)
         if profit >= left_thres:
