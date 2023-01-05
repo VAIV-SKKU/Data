@@ -198,6 +198,7 @@ class CandlstickChart:
             pixel_coordinates = get_pixel(self.size, lines, patches, fig, c)
             pixel_coordinates.to_csv(self.path / 'pixels' / f'{name}.csv')
 
+    @dataframe_empty_handler
     def load_pixel_coordinates(self, ticker, last_date):
         name = f'{ticker}_{last_date}'
         pixel_coordinates = pd.read_csv(self.path / 'pixels' / f'{name}.csv', index_col='Date')
