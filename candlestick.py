@@ -119,7 +119,7 @@ class CandlstickChart:
         start_index = trade_index - self.period + 1
         
         if start_index < 0:
-            return
+            return False
         
         start = dates[start_index]
         c = data.loc[start:last_date]
@@ -197,6 +197,8 @@ class CandlstickChart:
         if pixel:
             pixel_coordinates = get_pixel(self.size, lines, patches, fig, c)
             pixel_coordinates.to_csv(self.path / 'pixels' / f'{name}.csv')
+        
+        return True
 
     @dataframe_empty_handler
     def load_pixel_coordinates(self, ticker, last_date):
@@ -324,3 +326,28 @@ def get_config(name, root=Path.cwd()):
         'MACDColor': MACDColor
     }
     return config_dict
+
+
+def GetName(root=Path.cwd(), **config):
+    info = pd.read_csv(root / 'Image' / 'info.csv', index_col='Name').replace(np.nan, '')
+    config = ConvertConfig(**config)
+    print(config)
+    for k in config:
+        print(info[k])
+        if info.empty:
+            break
+        info = info[info[k] == config[k]]
+    return info.index.tolist()
+
+
+def ConvertConfig(**config):
+    for k in config:
+        if k == 'Size':
+            config[k] = f'{config[k][0]}x{config[k][1]}'
+        elif k in ['SMA', 'EMA', 'MACD']:
+            config[k] = '_'.join(map(str, config[k]))
+        elif k in ['SMAColor', 'EMAColor', 'MACDColor']:
+            config[k] = '_'.join(config[k])
+        else:
+            pass
+    return config
