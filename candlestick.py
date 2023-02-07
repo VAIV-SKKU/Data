@@ -117,7 +117,10 @@ class CandlstickChart:
             stock = FeatureStock(ticker, self.market, **self.feature)
             data = stock.load_data()
         dates = data.index.tolist()
-        trade_index = dates.index(last_date)
+        try:
+            trade_index = dates.index(last_date)
+        except ValueError:
+            return False
         start_index = trade_index - self.period + 1
         
         if start_index < 0:
