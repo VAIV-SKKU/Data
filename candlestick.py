@@ -105,7 +105,7 @@ class CandlstickChart:
         
     
     @dataframe_empty_handler
-    def make_chart(self, ticker, last_date, pixel=True):
+    def make_chart(self, ticker, last_date, pixel=True, data=None):
         '''
         ticker: str
         last_date: str
@@ -113,8 +113,9 @@ class CandlstickChart:
         pixel: bool
             whether to save pixel coordinates. True when making yolo chart
         '''
-        stock = FeatureStock(ticker, self.market, **self.feature, root=self.root)
-        data = stock.load_data()
+        if data is None:
+            stock = FeatureStock(ticker, self.market, **self.feature)
+            data = stock.load_data()
         dates = data.index.tolist()
         trade_index = dates.index(last_date)
         start_index = trade_index - self.period + 1
