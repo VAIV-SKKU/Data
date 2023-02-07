@@ -28,6 +28,7 @@ class CandlstickChart:
         '''
         if 'undefined' in kwargs:
             return
+        self.root = root
         self.market = market.capitalize()
         self.size = size
         self.period = period
@@ -112,7 +113,7 @@ class CandlstickChart:
         pixel: bool
             whether to save pixel coordinates. True when making yolo chart
         '''
-        stock = FeatureStock(ticker, self.market, **self.feature)
+        stock = FeatureStock(ticker, self.market, **self.feature, root=self.root)
         data = stock.load_data()
         dates = data.index.tolist()
         trade_index = dates.index(last_date)
